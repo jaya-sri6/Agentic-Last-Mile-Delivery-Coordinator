@@ -40,3 +40,40 @@ def get_driver_location(driver_id):
     }
     print(f"Simulated driver location: {location}.")
     return {"driver_id": driver_id, "location": location}
+
+
+def notify_customer(customer_id, message):
+    """
+    Simulates notifying a customer with a message.
+    """
+    print(f"Notifying customer {customer_id}: '{message}'")
+    # Simulate API call delay
+    time.sleep(0.5)
+    print("Notification sent successfully.")
+    return {"status": "success", "customer_id": customer_id}
+
+
+def re_route_driver(driver_id, new_destination, reason):
+    """
+    Simulates re-routing a driver to a new destination for a given reason.
+    """
+    print(f"Re-routing driver {driver_id} to {new_destination} because: {reason}")
+    # Simulate API call delay
+    time.sleep(1)
+    print(f"Driver {driver_id} successfully re-routed.")
+    return {"status": "success", "driver_id": driver_id, "new_destination": new_destination}
+
+
+def get_nearby_merchants(latitude, longitude, category, radius_km=2):
+    """
+    Simulates finding nearby merchants of a specific category.
+    """
+    print(f"Finding nearby '{category}' merchants near ({latitude}, {longitude})...")
+    # Simulate API call delay
+    time.sleep(1)
+    merchants = [
+        {"merchant_id": "merchant-888", "name": "Speedy Pizza", "wait_time_minutes": 15},
+        {"merchant_id": "merchant-999", "name": "Quick Burger", "wait_time_minutes": 10},
+    ]
+    print(f"Found {len(merchants)} nearby merchants.")
+    return {"merchants": merchants}
