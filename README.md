@@ -20,8 +20,17 @@ It intelligently coordinates between merchants, drivers, and customers, making h
 
 ## Setup
 ```bash
+# Clone the repository
 git clone <repo-url>
 cd project-synapse
+
+# Install dependencies
 pip install -r requirements.txt
-python src/main.py
+
+# Run the application with a scenario
+# (Requires OPENAI_API_KEY to be set as an environment variable)
+python src/main.py "There is a damaged packaging dispute for order order-789."
+
+# Or run in mock mode (no API key required)
+python src/main.py "There is a damaged packaging dispute for order order-789." --mock-llm
 ```

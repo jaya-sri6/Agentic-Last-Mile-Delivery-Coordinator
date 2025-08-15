@@ -77,3 +77,82 @@ def get_nearby_merchants(latitude, longitude, category, radius_km=2):
     ]
     print(f"Found {len(merchants)} nearby merchants.")
     return {"merchants": merchants}
+
+
+def initiate_mediation_flow(order_id, customer_id, driver_id):
+    """
+    Simulates initiating a real-time mediation flow for a dispute.
+    """
+    print(f"Initiating mediation for order {order_id} between customer {customer_id} and driver {driver_id}.")
+    time.sleep(1)
+    return {"status": "success", "mediation_id": f"med-{order_id}"}
+
+
+def collect_evidence(mediation_id, parties):
+    """
+    Simulates collecting evidence from parties in a dispute.
+    """
+    print(f"Collecting evidence for mediation {mediation_id} from {', '.join(parties)}.")
+    time.sleep(2) # Simulate time for parties to respond
+    evidence = {
+        "customer_photo_url": "https://example.com/spilled_drink.jpg",
+        "driver_statement": "The bag was sealed by the merchant.",
+        "customer_statement": "The seal was intact upon handover, but the drink was spilled inside the sealed bag."
+    }
+    print("Evidence collected.")
+    return {"status": "success", "evidence": evidence}
+
+
+def analyze_evidence(evidence):
+    """
+    Simulates analyzing the collected evidence to determine fault.
+    """
+    print("Analyzing evidence...")
+    time.sleep(1.5)
+    if "sealed" in evidence.get("driver_statement", "") and "intact" in evidence.get("customer_statement", ""):
+        fault = "merchant"
+        reason = "The damage occurred inside a sealed bag, indicating poor packaging by the merchant."
+    else:
+        fault = "unclear"
+        reason = "The evidence is not sufficient to determine clear fault."
+
+    print(f"Analysis complete. Determined fault: {fault}.")
+    return {"fault": fault, "reason": reason}
+
+
+def issue_instant_refund(customer_id, order_id, amount):
+    """
+    Simulates issuing an instant refund to a customer.
+    """
+    print(f"Issuing refund of ${amount} to customer {customer_id} for order {order_id}.")
+    time.sleep(0.5)
+    return {"status": "success", "refund_id": f"ref-{order_id}"}
+
+
+def exonerate_driver(driver_id, order_id):
+    """
+    Simulates clearing a driver of fault for a delivery issue.
+    """
+    print(f"Exonerating driver {driver_id} from fault for order {order_id}.")
+    time.sleep(0.5)
+    return {"status": "success", "driver_id": driver_id}
+
+
+def log_merchant_packaging_feedback(merchant_id, order_id, feedback_details):
+    """
+    Simulates logging feedback about a merchant's packaging.
+    """
+    print(f"Logging packaging feedback for merchant {merchant_id} regarding order {order_id}.")
+    print(f"Feedback: {feedback_details}")
+    time.sleep(0.5)
+    return {"status": "success", "log_id": f"log-{order_id}"}
+
+
+def notify_resolution(parties, order_id, resolution_summary):
+    """
+    Simulates notifying all parties of the final resolution.
+    """
+    print(f"Notifying parties ({', '.join(parties)}) for order {order_id} of the resolution.")
+    print(f"Resolution: {resolution_summary}")
+    time.sleep(0.5)
+    return {"status": "success"}
