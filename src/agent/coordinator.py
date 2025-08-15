@@ -10,7 +10,8 @@ from src.tools.logistics import (
     re_route_driver, get_nearby_merchants, initiate_mediation_flow,
     collect_evidence, analyze_evidence, issue_instant_refund, exonerate_driver,
     log_merchant_packaging_feedback, notify_resolution, contact_recipient_via_chat,
-    suggest_safe_drop_off, find_nearby_locker
+    suggest_safe_drop_off, find_nearby_locker, calculate_alternative_route,
+    notify_passenger_and_driver, check_flight_status
 )
 
 class Coordinator:
@@ -46,6 +47,9 @@ class Coordinator:
             Tool(name="Contact Recipient via Chat", func=contact_recipient_via_chat, description="Contacts a recipient via chat to get instructions. Input: {'recipient_id': str, 'initial_message': str}."),
             Tool(name="Suggest Safe Drop-off", func=suggest_safe_drop_off, description="Suggests and confirms a safe drop-off location with a recipient. Input: {'recipient_id': str, 'suggestion': str}."),
             Tool(name="Find Nearby Locker", func=find_nearby_locker, description="Finds a secure parcel locker near a location. Input: {'latitude': float, 'longitude': float}."),
+            Tool(name="Calculate Alternative Route", func=calculate_alternative_route, description="Calculates an alternative route to avoid an obstruction. Input: {'current_route': dict, 'obstruction': str}."),
+            Tool(name="Notify Passenger and Driver", func=notify_passenger_and_driver, description="Sends a synchronized notification to a passenger and a driver. Input: {'passenger_id': str, 'driver_id': str, 'message': str}."),
+            Tool(name="Check Flight Status", func=check_flight_status, description="Checks the status of a flight. Input: flight_number."),
         ]
 
         # 3. Create the prompt template
@@ -53,6 +57,9 @@ class Coordinator:
         You are an intelligent logistics coordinator for a last-mile delivery service.
         Your goal is to resolve disruptions efficiently and communicate clearly.
 
+        ### Your Protocols ###
+
+        **Dispute Resolution:**
         When handling a dispute between a customer and a driver, your primary goal is to be a fair and impartial mediator. Follow these steps:
         1. Initiate a mediation flow to open a communication channel.
         2. Collect evidence from all parties involved.
@@ -60,11 +67,18 @@ class Coordinator:
         4. Based on your analysis, form a resolution plan.
         5. Clearly communicate the final resolution to all parties.
 
+        **Unavailable Recipient:**
         When a recipient is unavailable at the delivery location, follow this protocol:
         1. First, try to contact the recipient via chat to get instructions.
-        2. Based on their response, evaluate the options. If they give permission for a safe drop-off (e.g., leaving with a concierge), use the 'Suggest Safe Drop-off' tool to confirm.
+        2. Based on their response, evaluate the options. If they give permission for a safe drop-off, use the 'Suggest Safe Drop-off' tool to confirm.
         3. If no safe drop-off is possible, use the 'Find Nearby Locker' tool to see if a secure parcel locker is a viable alternative.
         4. Communicate the final plan clearly.
+
+        **Traffic Obstruction:**
+        When a major traffic obstruction is detected on a passenger's route, especially for an urgent trip like to an airport, your response must be swift and informative.
+        1. Immediately check for alternative routes to understand the potential delay.
+        2. If the passenger is heading to the airport, it may be useful to check their flight status to see if it is also delayed. This provides helpful context.
+        3. Proactively notify both the passenger and the driver of the obstruction, the new route, and the updated ETA. Reassure them that you are handling the situation.
 
         You have access to the following tools:
         {tools}
@@ -146,9 +160,45 @@ class Coordinator:
                 print("\n> Finished chain.")
                 return {"input": disruption_scenario, "output": summary}
 
+            elif "traffic" in disruption_scenario.lower() or "obstruction" in disruption_scenario.lower():
+                # Mock logic for "Sudden Major Traffic Obstruction"
+                print("Thought: A major traffic obstruction has been reported for an urgent trip. I must act quickly.")
+
+                # Step 1: Calculate Alternative Route
+                print("Action: Calculate Alternative Route")
+                action_input = {'current_route': {'start': 'Location A', 'end': 'Airport', 'original_eta': 30}, 'obstruction': 'major accident'}
+                print(f"Action Input: {action_input}")
+                observation = calculate_alternative_route(**action_input)
+                print(f"Observation: {observation}")
+                new_route_summary = observation['new_route']['summary']
+                new_eta = observation['new_route']['updated_eta_minutes']
+
+                # Step 2: Check Flight Status
+                print("Thought: The new route adds time. Since the passenger is going to the airport, I should check their flight status for context.")
+                print("Action: Check Flight Status")
+                action_input = "SQ123"
+                print(f"Action Input: {action_input}")
+                observation = check_flight_status(action_input)
+                print(f"Observation: {observation}")
+                flight_status = observation['flight_status']
+
+                # Step 3: Notify Parties
+                print("Thought: The flight is also delayed, which is helpful context. I will now inform both parties of the new plan.")
+                print("Action: Notify Passenger and Driver")
+                message = f"Major accident detected on your route. We've found an alternative: {new_route_summary}. New ETA is {new_eta} minutes. Good news: your flight {action_input} is also {flight_status.lower()}, so you should still have plenty of time."
+                action_input = {'passenger_id': 'pass-123', 'driver_id': 'driver-456', 'message': message}
+                print(f"Action Input: {action_input}")
+                notify_passenger_and_driver(**action_input)
+
+                summary = f"Successfully re-routed trip to avoid traffic. New ETA is {new_eta} minutes. Both passenger and driver have been notified."
+                print(f"Thought: The situation is handled. The driver has a new route and the passenger is informed.")
+                print(f"Final Answer: {summary}")
+                print("\n> Finished chain.")
+                return {"input": disruption_scenario, "output": summary}
+
             else:
-                # Mock logic for "Overloaded Restaurant"
-                print("Thought: The user is asking to check on an order. The first step is to get the status of the merchant.")
+                # Fallback mock logic for "Overloaded Restaurant"
+                print("Thought: This seems to be a merchant-related issue. I will check the merchant's status.")
                 print("Action: Get Merchant Status...")
                 observation = get_merchant_status("merchant-456")
                 print(f"Observation: {observation}")

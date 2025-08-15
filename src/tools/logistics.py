@@ -202,3 +202,41 @@ def find_nearby_locker(latitude, longitude):
     ]
     print(f"Found {len(lockers)} nearby lockers.")
     return {"status": "success", "lockers": lockers}
+
+
+def calculate_alternative_route(current_route, obstruction):
+    """
+    Simulates calculating an alternative route to avoid an obstruction.
+    """
+    print(f"Calculating alternative route for trip from {current_route['start']} to {current_route['end']} to avoid '{obstruction}'.")
+    time.sleep(1.5)
+    new_eta_minutes = current_route['original_eta'] + random.randint(5, 15) # New route is a bit longer
+    new_route = {
+        "new_route_id": f"route-{random.randint(1000, 9999)}",
+        "updated_eta_minutes": new_eta_minutes,
+        "summary": "Take Oak Street instead of Main Street to avoid accident."
+    }
+    print("Alternative route calculated.")
+    return {"status": "success", "new_route": new_route}
+
+
+def notify_passenger_and_driver(passenger_id, driver_id, message):
+    """
+    Simulates sending a synchronized notification to both passenger and driver.
+    """
+    print(f"Sending notification to passenger {passenger_id} and driver {driver_id}: '{message}'")
+    time.sleep(0.5)
+    print("Notifications sent successfully.")
+    return {"status": "success"}
+
+
+def check_flight_status(flight_number):
+    """
+    Simulates checking the status of a flight.
+    """
+    print(f"Checking status for flight {flight_number}...")
+    time.sleep(1)
+    statuses = ["On Time", "Delayed", "Cancelled"]
+    flight_status = random.choice(statuses)
+    print(f"Flight {flight_number} status: {flight_status}.")
+    return {"status": "success", "flight_number": flight_number, "flight_status": flight_status}
