@@ -20,6 +20,8 @@ It intelligently coordinates between merchants, drivers, and customers, making h
 
 ## Setup
 ```bash
+git clone <repo-url>
+cd project-synapse
 pip install -r requirements.txt
 python src/main.py
 ```
