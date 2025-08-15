@@ -156,3 +156,49 @@ def notify_resolution(parties, order_id, resolution_summary):
     print(f"Resolution: {resolution_summary}")
     time.sleep(0.5)
     return {"status": "success"}
+
+
+def contact_recipient_via_chat(recipient_id, initial_message):
+    """
+    Simulates contacting a recipient via chat and getting a response.
+    """
+    print(f"Contacting recipient {recipient_id} with message: '{initial_message}'")
+    time.sleep(1.5) # Simulate sending message and waiting for reply
+    responses = [
+        "I'm not home right now, can you leave it with my neighbour at Unit 102?",
+        "Just leave it at the door, please.",
+        "I'm stuck in traffic, I'll be there in 15 minutes!",
+        "Sorry, I'm out of town. Can you deliver it tomorrow?",
+    ]
+    simulated_response = random.choice(responses)
+    print(f"Received response from {recipient_id}: '{simulated_response}'")
+    return {"status": "success", "response": simulated_response}
+
+
+def suggest_safe_drop_off(recipient_id, suggestion):
+    """
+    Simulates suggesting a safe drop-off location and getting confirmation.
+    """
+    print(f"Suggesting to {recipient_id}: 'Is it okay if I {suggestion}?'")
+    time.sleep(1)
+    confirmation = random.choice([True, False])
+    if confirmation:
+        print(f"Recipient {recipient_id} approved the suggestion.")
+        return {"status": "approved", "suggestion": suggestion}
+    else:
+        print(f"Recipient {recipient_id} rejected the suggestion.")
+        return {"status": "rejected", "suggestion": suggestion}
+
+
+def find_nearby_locker(latitude, longitude):
+    """
+    Simulates finding a nearby secure parcel locker.
+    """
+    print(f"Searching for secure parcel lockers near ({latitude}, {longitude})...")
+    time.sleep(1)
+    lockers = [
+        {"locker_id": "locker-a1", "address": "123 Main St, Lobby", "availability": "high"},
+        {"locker_id": "locker-b2", "address": "456 Oak Ave, Supermarket", "availability": "low"},
+    ]
+    print(f"Found {len(lockers)} nearby lockers.")
+    return {"status": "success", "lockers": lockers}
