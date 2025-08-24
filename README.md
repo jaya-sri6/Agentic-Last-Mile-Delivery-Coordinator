@@ -12,7 +12,7 @@ It intelligently coordinates between merchants, drivers, and customers, making h
 - 🗺 **Digital Twin Output** – Real-time map-ready JSON updates
 - 🚀 **Zero-Shot Tool Adoption** – Learns and uses new tools mid-operation
 
-## Wow Factor (Hackathon Winning Points)
+## Wow Factor 
 1. **Feels Human** – Friendly Grab voice, empathy in decision-making
 2. **Adapts in Real-Time** – Handles unexpected tools & scenarios
 3. **Visually Explains Itself** – Step-by-step reasoning cards
