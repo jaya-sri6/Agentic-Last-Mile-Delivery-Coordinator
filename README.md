@@ -1,7 +1,7 @@
-# Project Synapse – Agentic Last-Mile Delivery Coordinator
+# Agentic Last-Mile Delivery Coordinator
 
 ## Overview
-Project Synapse is a multi-agent, LLM-powered AI system designed for autonomous last-mile disruption resolution.
+Agentic Last-Mile Delivery Coordinator is a multi-agent, LLM-powered AI system designed for autonomous last-mile disruption resolution.
 It intelligently coordinates between merchants, drivers, and customers, making human-like decisions and showing transparent reasoning.
 
 ## Features
